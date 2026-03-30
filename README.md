@@ -3,11 +3,12 @@
 A robust Python-based automation tool to download gazette PDFs from `egazette.gov.in`. This script is designed to handle ASP.NET complexity, session states, and site-wide pagination.
 
 ## Features
-- **Headless Browser:** Uses Playwright (Chromium) to handle dynamic content.
-- **Auto-Pagination:** Automatically navigates through multiple pages (Page 1, 2, 3...) to fulfill the download quota.
-- **Duplicate Check:** Skips files that have already been downloaded to the `pdfs/` directory.
-- **Retry Logic:** Includes built-in retries and long timeouts (2 minutes) to handle slow government server responses.
-- **Agent Ready:** Structured for easy deployment on platforms like Modal.com.
+- **Headless Browser:** Uses Playwright (Chromium) to handle dynamic ASP.NET content.
+- **Parallel Downloads:** Downloads multiple PDFs simultaneously (default: 6) using `asyncio` semaphores for maximum speed.
+- **Dual-Category Support:** Automatically processes both **Extra Ordinary** and **Weekly** gazettes in one run.
+- **Auto-Pagination:** Navigates through multiple pages (Page 1, 2, 3...) for each category.
+- **Smart Duplicate Check:** Skips files already present in the folder, ensuring you only download new content.
+- **Organized Storage:** Automatically sorts PDFs into `RecentExtraOrdinaryGazettes` and `RecentWeeklyGazettes` subdirectories.
 
 ## Prerequisites
 - Python 3.8 or higher.
@@ -16,26 +17,18 @@ A robust Python-based automation tool to download gazette PDFs from `egazette.go
 ## Setup Instructions
 
 1. **Create and Activate Virtual Environment (Recommended):**
-   This keeps your project dependencies isolated.
    ```bash
-   # Create a virtual environment named .venv
    python3 -m venv .venv
-
-   # Activate it (on macOS/Linux)
-   source .venv/bin/activate
-
-   # Activate it (on Windows)
-   # .venv\Scripts\activate
+   source .venv/bin/activate  # On macOS/Linux
+   # .venv\Scripts\activate   # On Windows
    ```
 
 2. **Install Dependencies:**
-   Once the virtual environment is active, install the required libraries:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Install Browser Binaries:**
-   Playwright requires specific browser binaries to run. Install Chromium with:
+3. **Install Browser Binaries:**
    ```bash
    playwright install chromium
    ```
@@ -43,16 +36,16 @@ A robust Python-based automation tool to download gazette PDFs from `egazette.go
 ## Usage
 
 ### Basic Run
-Execute the script to start downloading:
+Execute the script to start the multi-category parallel download:
 ```bash
 python3 download_playwright.py
 ```
 
 ### Configuration
-You can modify the following variables at the top of `download_playwright.py`:
-- `MAX_DOWNLOADS`: The total number of **new** PDF files you want to acquire (default: 30).
-- `OUTPUT_DIR`: The local folder where PDFs will be stored (default: `pdfs`).
-- `max_retries`: Number of attempts to connect if the site is slow.
+Update these variables at the top of `download_playwright.py`:
+- `MAX_DOWNLOADS`: Total new files to acquire per category (default: 300).
+- `CONCURRENT_DOWNLOADS`: Number of files to download in parallel (default: 6).
+- `OUTPUT_DIR`: Root folder for storing PDFs.
 
 ## Troubleshooting
 - **Timeout Errors:** If the script times out frequently, the site might be under heavy load. The current timeout is set to 2 minutes per page.
