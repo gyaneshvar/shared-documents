@@ -7,7 +7,7 @@ import httpx
 # Configuration
 BASE_URL = "https://egazette.gov.in/"
 OUTPUT_DIR = "pdfs"
-MAX_DOWNLOADS = 30  # Increased to 10 as requested
+MAX_DOWNLOADS = 300  # Increased to 10 as requested
 
 async def download_file(url, filename):
     """Download a file with error handling."""
